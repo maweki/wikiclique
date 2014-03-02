@@ -183,7 +183,7 @@ def print_results(database):
             row = next(c.execute('SELECT * FROM pages WHERE id = ?', [i]))
             return row[1]
     for count, res in enumerate(result):
-        print(count, 'Result of length', len(res), ':', ','.join(get_name(res)))
+        print(count, 'Result of length', len(res), ':\n', ', '.join(get_name(res)))
 
 if __name__ == "__main__":
     parse_args()
