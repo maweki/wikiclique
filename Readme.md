@@ -5,6 +5,11 @@ This script is for finding cliques in the pages of a wikimedia installation.
 ## Data
 You must use gzipped or bz2ipped xml-dumps from a wikimedia installation.
 
+## Temporary File
+The temporary file grows to about 110% of the original compressed file. Make
+sure you have enough space for that. It is also recommended to not have the
+temporary file on the same physical drive as the data file.
+
 ## Usage
     wikiclique.py [-h] [--amnt AMNT] [--tmp TMP] [--info INFO] xmlfile
 
