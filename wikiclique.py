@@ -65,6 +65,7 @@ def cleanup():
 def create_graph(xmlparser, database, origin_stream):
     c = database.cursor()
 
+    @functools.lru_cache(maxsize=8388608, typed=False)
     def addPage(page):
         c.execute('INSERT OR IGNORE INTO pages VALUES(NULL  , ?)', (page,))
 
@@ -118,6 +119,7 @@ def create_graph(xmlparser, database, origin_stream):
     database.commit()
     print('done')
     getIdFromPagename.cache_clear()
+    addPage.cache_clear()
 
 def analyze_graph(database):
     c = database.cursor()
