@@ -68,7 +68,7 @@ def create_graph(xmlparser, database):
     def addPage(page):
         c.execute('INSERT OR IGNORE INTO pages VALUES(NULL  , ?)', (page,))
 
-    @functools.lru_cache(maxsize=65536, typed=False)
+    @functools.lru_cache(maxsize=8388608, typed=False)
     def getIdFromPagename(page):
         id_, = next(c.execute('SELECT id FROM pages WHERE pagename = ? LIMIT 1', (page,)))
         return id_
@@ -140,7 +140,7 @@ def analyze_graph(database):
     def get_vertex_list():
 	    return set(row[0] for row in c.execute('SELECT id FROM pages'))
 
-    @functools.lru_cache(maxsize=65536, typed=False)
+    @functools.lru_cache(maxsize=131072, typed=False)
     def get_children(parent):
         l1 = set(t for f,t in c.execute('SELECT fromid, toid FROM cons WHERE fromid = ?', (parent,)) )
         l2 = set(f for f,t in c.execute('SELECT fromid, toid FROM cons WHERE toid = ?', (parent,)) )
