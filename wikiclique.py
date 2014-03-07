@@ -62,7 +62,7 @@ def cleanup():
     conn.close()
     os.unlink(os.path.abspath(args.tmp))
 
-def create_graph(xmlparser, database):
+def create_graph(xmlparser, database, origin_stream):
     c = database.cursor()
 
     def addPage(page):
@@ -85,6 +85,8 @@ def create_graph(xmlparser, database):
     next_info = args.info
     first = None
 
+    origin_size = os.stat(origin_stream.fileno()).st_size
+
     import re
 
     for event, elem in xmlparser:
@@ -96,7 +98,8 @@ def create_graph(xmlparser, database):
 
             article_count += 1
             if article_count >= next_info:
-                print('Analyzing article', article_count, article)
+                progress = (origin_stream.tell() / origin_size)*100
+                print('Analyzing article', round(progress,2),'%', article_count, article)
                 next_info += args.info
 
             children = set()
@@ -189,7 +192,7 @@ if __name__ == "__main__":
     parse_args()
     xmlp = get_xml_parser(args.xmlfile)
     conn = init_db()
-    create_graph(xmlp, conn)
+    create_graph(xmlp, conn, args.xmlfile)
     analyze_graph(conn)
     print_results(conn)
     cleanup()
